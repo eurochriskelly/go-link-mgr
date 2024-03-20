@@ -7,5 +7,8 @@ build:
 install:
 	go install ./linkman/
 
+uninstall:
+	bash scripts/install.sh --uninstall
+
 run:
 	./dist/linkman --by-name
