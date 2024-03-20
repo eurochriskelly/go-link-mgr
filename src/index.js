@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { findByName, findByContent } = require('./lib/find-files')
 
 const ARGS = {}

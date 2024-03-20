@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Manage symlinks to files in various git repositories for managing tasks",
   "main": "src/index.js",
+  "bin": {
+    "linkman": "src/index.js",
+    "install": "npm link -g ."
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
