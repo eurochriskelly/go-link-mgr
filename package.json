@@ -1,0 +1,21 @@
+{
+  "name": "linkman",
+  "version": "1.0.0",
+  "description": "Manage symlinks to files in various git repositories for managing tasks",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "link:by-filename": "node src/index.js --find-by-name --base-dir=~/Workspace/repos",
+    "link:by-content": "node src/index.js --find-by-content"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "simple-git": "^3.23.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
