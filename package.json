@@ -10,8 +10,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "link:by-filename": "node src/index.js --find-by-name --base-dir=~/Workspace/repos",
-    "link:by-content": "node src/index.js --find-by-content"
+    "link:by-filename": "linkman --find-by-name --base-dir=~/Workspace/repos",
+    "link:by-content": "linkman --find-by-content"
   },
   "keywords": [],
   "author": "",

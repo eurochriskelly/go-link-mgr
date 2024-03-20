@@ -1,15 +1,14 @@
-const { lstat, readlinkSync, readdirSync, mkdirSync, symlinkSync, lstatSync } = require('fs')
+const { lstat, readlinkSync, readdirSync, mkdirSync, symlinkSync, lstatSync, link } = require('fs')
 const fs = require('fs').promises
 const { resolve, basename, extname, join } = require('path')
 const { homedir } = require('os')
 const simpleGit = require('simple-git')
 const { matchFiles } = require('./matcher')
-const { getSelection } = require('./input-collector')
+const { getFilePattern, getSelection } = require('./input-collector')
 const { rr, yy, gg, bb, ww } = require('./colors')
 
 const findByName = async (ARGS) => {
-    // const filePattern = ARGS['--file-pattern'] || await IC.getFilePattern()
-    const filePattern = 'common OR scr-'
+    const filePattern = ARGS['--file-pattern'] || await getFilePattern()
     console.log(gg(`Finding files with pattern: ${filePattern} starting from base-dir [${ARGS['--base-dir'] || '.'}]`))
     const startPath = resolve(ARGS['--base-dir'].replace('~', homedir()) || '.')
     // for each directory in startPath, check if it is a git repo
@@ -43,9 +42,13 @@ const findByName = async (ARGS) => {
         .forEach(async item => {
             const localDir = resolve('.', 'links', item.dir)
             mkdirSync(localDir, { recursive: true })
-            const fileList = await (await listPathsInDirectory(localDir)).map(x => x.resolved)
-            console.log(`File list:`, fileList)
-            const count = fileList.length
+            const fileList = await (await listPathsInDirectory(localDir))
+            const absList = fileList.map(x => x.resolved)
+            const linkList = fileList.map(x => x.original)
+            const count = Math.max(...linkList
+                .map(x => x.split('/').pop())
+                .map(x => +(x.split('_')[0]))
+            )
             const ext = extname(item.file)
             // the file name should be {NUMBER}_{BASENAME}#{LOCAL_PATH_WITH_%}.{EXT}
             const num = `${count+1}`.padStart(2, '0')
@@ -61,9 +64,9 @@ const findByName = async (ARGS) => {
             // make directory localDir if it doesn't exist
             // create a symbolic link to the file in the localDir
             const linkPath = resolve(localDir, localName)
-            console.log(`Creating link: ${linkPath}`)
             // only create the link if it doesn't already exist
-            if (!fileList.includes(item.absolutePath)) {
+            if (!absList.includes(item.absolutePath)) {
+                console.log(`Creating link: ${linkPath}`)
                 symlinkSync(item.absolutePath, linkPath)
             } else {
                 console.log('Link already exists, skipping')
