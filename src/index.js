@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+const { showHelp } = require('./lib/help')
 const { findByName, findByContent } = require('./lib/find-files')
 
 const ARGS = {}
@@ -16,7 +16,7 @@ const main = () => {
             break
 
         default:
-            console.log('Invalid command: ' + ARGS.command)
+            showHelp()
             break;
     }
 }

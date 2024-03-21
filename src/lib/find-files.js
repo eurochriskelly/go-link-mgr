@@ -45,7 +45,7 @@ const findByName = async (ARGS) => {
             const fileList = await (await listPathsInDirectory(localDir))
             const absList = fileList.map(x => x.resolved)
             const linkList = fileList.map(x => x.original)
-            const count = Math.max(...linkList
+            const count = Math.max(1, ...linkList
                 .map(x => x.split('/').pop())
                 .map(x => +(x.split('_')[0]))
             )
@@ -60,7 +60,7 @@ const findByName = async (ARGS) => {
                 localPart = localPart.slice(0, -1)
             }
             const localName = `${num}_${base}#${localPart}${ext}`
-            console.log(rr(`Linking: ${item.absolutePath} to dir [${localDir}] with name [${localName}]`), item)
+            console.log(yy(`Linking: ${item.absolutePath} to dir [${localDir}] with name [${localName}]`), item)
             // make directory localDir if it doesn't exist
             // create a symbolic link to the file in the localDir
             const linkPath = resolve(localDir, localName)
